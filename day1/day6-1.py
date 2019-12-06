@@ -125,12 +125,12 @@ orbit_map = {}
 for relation in orbits:
     child = relation[4:]
     parent = relation[0:3]
-    orbit_map.setdefault(child, list())
+    orbit_map[child] = []
+    orbit_map[parent] = []
 
 for relation in orbits:
     child = relation[4:]
     parent = relation[0:3]
-    orbit_map.setdefault(parent, list())
     children = orbit_map[parent]
     children.append(child)
 
