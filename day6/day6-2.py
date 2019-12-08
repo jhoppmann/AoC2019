@@ -113,15 +113,21 @@ orbits = ["HL2)HP5", "PD5)SVL", "GGS)YTS", "59G)C67", "V3R)BTY", "B9B)4QH", "P42
 
 
 
-def count_depth(node: str, depth: int):
-    global target_depth
-    target_depth += depth
+def find_way(node: str, way: list):
+    way.append(node)
+    if (node == 'SAN'):
+        global way_to_san
+        way_to_san = way
+    elif (node == 'YOU'):
+        global way_to_me
+        way_to_me = way
     for child in orbit_map[node]:
-        count_depth(child, depth + 1)
+        find_way(child, way.copy())
 
 
 orbit_map = {}
-target_depth = 0
+way_to_san = []
+way_to_me = []
 
 for relation in orbits:
     child = relation[4:]
@@ -136,5 +142,16 @@ for relation in orbits:
     children.append(child)
 
 print(orbit_map)
-count_depth("COM", 0)
-print(target_depth)
+find_way("COM", [])
+print(len(way_to_me), way_to_me)
+print("----------------------------------")
+print(len(way_to_san), way_to_san)
+
+common_systems = 0
+for system in way_to_san:
+    if system in way_to_me:
+        common_systems += 1
+
+transfers = len(way_to_me) + len(way_to_san) - 2 * (common_systems + 1)
+
+print(transfers)
